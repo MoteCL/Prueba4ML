@@ -1,0 +1,50 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/raw/spam.csv
+      hash: md5
+      md5: 4566fe81ccd7961063e393a99e8ec2f1
+      size: 480130
+    - path: src/preprocess.py
+      hash: md5
+      md5: f230051ae11f98633efdee18d6576d9d
+      size: 1077
+    outs:
+    - path: data/preprocessed/preprocessed_data.csv
+      hash: md5
+      md5: 5a37e0bf7a420a017351e1887b6791d0
+      size: 739855
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/preprocessed/preprocessed_data.csv
+      hash: md5
+      md5: 5a37e0bf7a420a017351e1887b6791d0
+      size: 739855
+    - path: src/train.py
+      hash: md5
+      md5: dff8d7187a132739ebc1adb7cfd67d02
+      size: 1417
+    outs:
+    - path: models/model.h5
+      hash: md5
+      md5: 265461d5f94ad33924c4fd1aa6602b2f
+      size: 8813584
+  convert_to_onnx:
+    cmd: python src/convert_to_onnx.py
+    deps:
+    - path: models/model.h5
+      hash: md5
+      md5: 265461d5f94ad33924c4fd1aa6602b2f
+      size: 8813584
+    - path: src/convert_to_onnx.py
+      hash: md5
+      md5: cd9d3b16126a36a34d75ef64617e21de
+      size: 880
+    outs:
+    - path: models/model.onnx
+      hash: md5
+      md5: a7b15f7da09aab7deb1fb0200cacb3f4
+      size: 2940889

@@ -1,0 +1,24 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/raw/spam.csv
+    outs:
+      - data/preprocessed/preprocessed_data.csv
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/preprocessed/preprocessed_data.csv
+    outs:
+      - models/model.h5
+
+  convert_to_onnx:
+    cmd: python src/convert_to_onnx.py
+    deps:
+      - src/convert_to_onnx.py
+      - models/model.h5
+    outs:
+      - models/model.onnx
