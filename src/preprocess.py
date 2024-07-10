@@ -14,6 +14,9 @@ df.rename(columns={'Category': 'target', 'Message': 'text'}, inplace=True)
 # Handle missing values
 df['text'] = df['text'].fillna('')
 
+# Convert all entries in the 'text' column to strings
+df['text'] = df['text'].astype(str)
+
 # Encode target labels
 encoder = LabelEncoder()
 df['target'] = encoder.fit_transform(df['target'])
@@ -22,14 +25,12 @@ df['target'] = encoder.fit_transform(df['target'])
 ps = nltk.stem.porter.PorterStemmer()
 
 def transform_text(text):
-    if isinstance(text, str):
-        text = text.lower()
-        text = nltk.word_tokenize(text)
-        y = [i for i in text if i.isalnum()]
-        y = [i for i in y if i not in stopwords.words('english') and i not in string.punctuation]
-        y = [ps.stem(i) for i in y]
-        return " ".join(y)
-    return ""
+    text = text.lower()
+    text = nltk.word_tokenize(text)
+    y = [i for i in text if i.isalnum()]
+    y = [i for i in y if i not in stopwords.words('english') and i not in string.punctuation]
+    y = [ps.stem(i) for i in y]
+    return " ".join(y)
 
 df['transformed_text'] = df['text'].apply(transform_text)
 
